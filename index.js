@@ -26,7 +26,7 @@ const app = express();
 app.use(/.*/, cors());
 
 for (let i = 2; i < openApiApp._router.stack.length; i++) {
-  app._router.stack.push(openApiApp._router.stack[i])
+  app._router.stack.push(openApiApp._router.stack[i]);
 }
 
 // Initialize the Swagger middleware
