@@ -1,0 +1,752 @@
+openapi: 3.0.3
+info:
+  title: MotionPoint Proxy Configuration API
+  description: The Proxy Configuration API provides programmatic access to MotionPoint's
+    translation proxy configurations.
+  license:
+    name: Copyright (c) 2000-2023 MotionPoint Corporation. All Rights Reserved.
+  version: 2.0.0
+servers:
+- url: /
+paths:
+  /proxy-configs:
+    get:
+      description: Retrieve a list of available proxy configurations
+      operationId: proxy_configsGET
+      parameters:
+      - name: X-MotionCore-UserName
+        in: header
+        description: User name header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: buzzaldrin
+      responses:
+        "200":
+          description: List of available proxy configurations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/inline_response_200'
+                x-content-type: application/json
+              example:
+              - cn: BestBuy
+                qn: EN.ES.1
+              - cn: Uline
+                qn: EN.ES.MX.1
+        "400":
+          description: Provided request parameters are invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Provided request parameters are invalid.
+        "401":
+          description: Provided credentials are not valid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Provided credentials are not valid.
+        "429":
+          description: Too many simultaneous API requests.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Too many simultaneous API requests.
+        "500":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Unexpected error.
+      security:
+      - auth_header: []
+      x-swagger-router-controller: Default
+  /proxy-config:
+    get:
+      description: Retrieve a proxy configuration
+      operationId: proxy_configGET
+      parameters:
+      - name: X-MotionCore-UserName
+        in: header
+        description: User name header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: buzzaldrin
+      - name: X-MotionCore-Queue
+        in: header
+        description: Queue name header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          pattern: "^[A-Z]{2}\\.[A-Z]{2}(\\.[A-Z]{2})?\\.\\d$"
+          type: string
+          example: EN.ES.1
+      - name: changeset-id
+        in: query
+        description: Changeset id. If not present the latest version is returned.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Successfully retrieved changeset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        "400":
+          description: Provided request parameters are invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Provided request parameters are invalid.
+        "401":
+          description: Provided credentials are not valid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Provided credentials are not valid.
+        "404":
+          description: Configuration not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Configuration not found.
+        "429":
+          description: Too many simultaneous API requests.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Too many simultaneous API requests.
+        "500":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Unexpected error.
+      security:
+      - auth_header: []
+      x-swagger-router-controller: Default
+    post:
+      description: Add a proxy configuration changeset.
+      operationId: proxy_configPOST
+      parameters:
+      - name: X-MotionCore-UserName
+        in: header
+        description: User name header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: buzzaldrin
+      - name: X-MotionCore-Queue
+        in: header
+        description: Queue name header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          pattern: "^[A-Z]{2}\\.[A-Z]{2}(\\.[A-Z]{2})?\\.\\d$"
+          type: string
+          example: EN.ES.1
+      requestBody:
+        description: A changeset id is return if succesful.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/proxyconfig_body'
+      responses:
+        "200":
+          description: Successfully added changeset
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_2'
+        "400":
+          description: Provided request parameters are invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Provided request parameters are invalid.
+        "401":
+          description: Provided credentials are not valid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Provided credentials are not valid.
+        "404":
+          description: Configuration not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Configuration not found.
+        "429":
+          description: Too many simultaneous API requests.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Too many simultaneous API requests.
+        "500":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Unexpected error.
+      security:
+      - auth_header: []
+      x-swagger-router-controller: Default
+  /proxy-config-versions:
+    get:
+      description: Retrieve the versions of a proxy configuration
+      operationId: proxy_config_versionsGET
+      parameters:
+      - name: X-MotionCore-UserName
+        in: header
+        description: User name header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: buzzaldrin
+      - name: X-MotionCore-Queue
+        in: header
+        description: Queue name header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          pattern: "^[A-Z]{2}\\.[A-Z]{2}(\\.[A-Z]{2})?\\.\\d$"
+          type: string
+          example: EN.ES.1
+      - name: limit
+        in: query
+        description: Limit the number of items returned.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          example: 10
+      - name: offset
+        in: query
+        description: Offset to items returned. Starts at zero.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          example: 0
+      responses:
+        "200":
+          description: response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_3'
+        "400":
+          description: Provided request parameters are invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Provided request parameters are invalid.
+        "401":
+          description: Provided credentials are not valid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Provided credentials are not valid.
+        "404":
+          description: Configuration not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Configuration not found.
+        "429":
+          description: Too many simultaneous API requests.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Too many simultaneous API requests.
+        "500":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: Unexpected error.
+      security:
+      - auth_header: []
+      x-swagger-router-controller: Default
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+    inline_response_200:
+      properties:
+        cn:
+          type: string
+          description: Customer name
+          example: BestBuy
+        qn:
+          maxLength: 14
+          minLength: 7
+          pattern: "^[A-Z]{2}\\.[A-Z]{2}(\\.[A-Z]{2})?\\.\\d$"
+          type: string
+          description: Queue name
+          example: EN.ES.1
+      example:
+        cn: BestBuy
+        qn: EN.ES.1
+    inline_response_200_1:
+      type: object
+      properties:
+        changeset-id:
+          type: integer
+          description: Id of changeset
+          example: 25
+        version:
+          type: integer
+          description: Version number
+          example: 40
+        change-type:
+          type: string
+          description: Change type
+          example: ON-SITE-SEARCH
+          enum:
+          - BRANDING-ANALTYICS
+          - CUSTOM-TAG-HANDLING
+          - FILE-TRANSLATION
+          - FORMATTING-TAGS
+          - HEADERS-COOKIES
+          - JAVASCRIPT
+          - JSON
+          - LOCALIZATION
+          - MISCELLANEOUS
+          - NETWORK-SETTINGS
+          - ON-SITE-SEARCH
+          - PAGE-QUEUE-CONTROL
+          - PLUGINS
+          - REDIRECTIONS
+          - REQUEST-RESTRICTION
+          - SCOPE-MODIFICATION
+          - SEO
+          - SPEED-BUMP-SETTINGS
+          - TEXT HANDLING
+          - TRANSFORMATIONS
+          - TRANS-TAG-TEXT
+          - URL-MAPPINGS
+          - WEBCATT-SETTINGS
+          - XML
+        impact-index:
+          type: string
+          description: Impact index
+          example: HIGH
+          enum:
+          - HIGH
+          - MEDIUM
+          - LOW
+        line-number:
+          type: string
+          description: line number
+          example: "25"
+        URL:
+          type: string
+          description: URL
+          example: http://www.motionpoint.com/
+        desc:
+          type: string
+          description: description of change
+          example: Descripton of configuration change.
+        config-text:
+          type: string
+          description: configuration text
+          example: '# Configuration text here'
+        issue-number:
+          type: string
+          description: issue number
+          example: "1234.1"
+      example:
+        changeset-id: 25
+        config-text: '# Configuration text here'
+        impact-index: HIGH
+        change-type: ON-SITE-SEARCH
+        line-number: "25"
+        issue-number: "1234.1"
+        version: 40
+        URL: http://www.motionpoint.com/
+        desc: Descripton of configuration change.
+    proxyconfig_body:
+      required:
+      - URL
+      - change-type
+      - config-text
+      - desc
+      - impact-index
+      type: object
+      properties:
+        change-type:
+          type: string
+          description: Change type
+          enum:
+          - BRANDING-ANALTYICS
+          - CUSTOM-TAG-HANDLING
+          - FILE-TRANSLATION
+          - FORMATTING-TAGS
+          - HEADERS-COOKIES
+          - JAVASCRIPT
+          - JSON
+          - LOCALIZATION
+          - MISCELLANEOUS
+          - NETWORK-SETTINGS
+          - ON-SITE-SEARCH
+          - PAGE-QUEUE-CONTROL
+          - PLUGINS
+          - REDIRECTIONS
+          - REQUEST-RESTRICTION
+          - SCOPE-MODIFICATION
+          - SEO
+          - SPEED-BUMP-SETTINGS
+          - TEXT HANDLING
+          - TRANSFORMATIONS
+          - TRANS-TAG-TEXT
+          - URL-MAPPINGS
+          - WEBCATT-SETTINGS
+          - XML
+        impact-index:
+          type: string
+          description: Impact index
+          enum:
+          - HIGH
+          - MEDIUM
+          - LOW
+        line-number:
+          type: string
+          description: line number (optional)
+          example: "25"
+        URL:
+          type: string
+          description: URL (required)
+          example: http://www.motionpoint.com/
+        desc:
+          type: string
+          description: description of change (required)
+          example: Descripton of configuration change.
+        config-text:
+          type: string
+          description: configuration text (required)
+          example: '# Configuration text here'
+        issue-number:
+          type: string
+          description: issue number (optional)
+          example: "1234.1"
+    inline_response_200_2:
+      type: object
+      properties:
+        changeset-id:
+          type: integer
+          description: Changeset id number
+          example: 1
+        version:
+          type: integer
+          description: Version number
+          example: 40
+        queue:
+          maxLength: 14
+          minLength: 7
+          pattern: "^[A-Z]{2}\\.[A-Z]{2}(\\.[A-Z]{2})?\\.\\d$"
+          type: string
+          description: Queue name
+          example: EN.ES.1
+        change-type:
+          type: string
+          description: Change type
+          example: ON-SITE-SEARCH
+          enum:
+          - BRANDING-ANALTYICS
+          - CUSTOM-TAG-HANDLING
+          - FILE-TRANSLATION
+          - FORMATTING-TAGS
+          - HEADERS-COOKIES
+          - JAVASCRIPT
+          - JSON
+          - LOCALIZATION
+          - MISCELLANEOUS
+          - NETWORK-SETTINGS
+          - ON-SITE-SEARCH
+          - PAGE-QUEUE-CONTROL
+          - PLUGINS
+          - REDIRECTIONS
+          - REQUEST-RESTRICTION
+          - SCOPE-MODIFICATION
+          - SEO
+          - SPEED-BUMP-SETTINGS
+          - TEXT HANDLING
+          - TRANSFORMATIONS
+          - TRANS-TAG-TEXT
+          - URL-MAPPINGS
+          - WEBCATT-SETTINGS
+          - XML
+        impact-index:
+          type: string
+          description: Impact index
+          example: HIGH
+          enum:
+          - HIGH
+          - MEDIUM
+          - LOW
+        line-number:
+          type: string
+          description: line number
+          example: "25"
+        URL:
+          type: string
+          description: URL
+          example: http://www.motionpoint.com/
+        desc:
+          type: string
+          description: description of change
+          example: Descripton of configuration change.
+        config-text:
+          type: string
+          description: configuration text
+          example: '# Configuration text here'
+        issue-number:
+          type: string
+          description: issue number
+          example: "1234.1"
+      example:
+        changeset-id: 1
+        config-text: '# Configuration text here'
+        impact-index: HIGH
+        change-type: ON-SITE-SEARCH
+        line-number: "25"
+        issue-number: "1234.1"
+        version: 40
+        queue: EN.ES.1
+        URL: http://www.motionpoint.com/
+        desc: Descripton of configuration change.
+    inline_response_200_3:
+      type: object
+      properties:
+        changeset-id:
+          type: integer
+          description: changeset id number
+          example: 32
+        version:
+          type: integer
+          description: version number
+          example: 1
+        date-created:
+          type: string
+          description: date created
+          format: date-time
+          example: 2023-03-06T01:42:27.078Z
+        change-type:
+          type: string
+          description: change type
+          example: ON-SITE-SEARCH
+          enum:
+          - BRANDING-ANALTYICS
+          - CUSTOM-TAG-HANDLING
+          - FILE-TRANSLATION
+          - FORMATTING-TAGS
+          - HEADERS-COOKIES
+          - JAVASCRIPT
+          - JSON
+          - LOCALIZATION
+          - MISCELLANEOUS
+          - NETWORK-SETTINGS
+          - ON-SITE-SEARCH
+          - PAGE-QUEUE-CONTROL
+          - PLUGINS
+          - REDIRECTIONS
+          - REQUEST-RESTRICTION
+          - SCOPE-MODIFICATION
+          - SEO
+          - SPEED-BUMP-SETTINGS
+          - TEXT HANDLING
+          - TRANSFORMATIONS
+          - TRANS-TAG-TEXT
+          - URL-MAPPINGS
+          - WEBCATT-SETTINGS
+          - XML
+        impact-index:
+          type: string
+          description: Impact index
+          example: HIGH
+          enum:
+          - HIGH
+          - MEDIUM
+          - LOW
+        created-by:
+          type: string
+          description: created by user
+          example: Joe
+        line-number:
+          type: string
+          description: line number
+          example: "25"
+        URL:
+          type: string
+          description: URL
+          example: http://www.motionpoint.com/
+        desc:
+          type: string
+          description: description of change
+          example: Descripton of configuration change.
+        issue-number:
+          type: string
+          description: issue number
+          example: "1234"
+      example:
+        changeset-id: 32
+        impact-index: HIGH
+        change-type: ON-SITE-SEARCH
+        line-number: "25"
+        issue-number: "1234"
+        version: 1
+        created-by: Joe
+        URL: http://www.motionpoint.com/
+        date-created: 2023-03-06T01:42:27.078Z
+        desc: Descripton of configuration change.
+  responses:
+    Error400Response:
+      description: Provided request parameters are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            message: Provided request parameters are invalid.
+    Error401Response:
+      description: Provided credentials are not valid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            message: Provided credentials are not valid.
+    Error404Response:
+      description: Configuration not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            message: Configuration not found.
+    Error429Response:
+      description: Too many simultaneous API requests.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            message: Too many simultaneous API requests.
+    Error500Response:
+      description: Unexpected error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            message: Unexpected error.
+  parameters:
+    username-header:
+      name: X-MotionCore-UserName
+      in: header
+      description: User name header
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+      example: buzzaldrin
+    queue-header:
+      name: X-MotionCore-Queue
+      in: header
+      description: Queue name header
+      required: true
+      style: simple
+      explode: false
+      schema:
+        pattern: "^[A-Z]{2}\\.[A-Z]{2}(\\.[A-Z]{2})?\\.\\d$"
+        type: string
+        example: EN.ES.1
+    limit:
+      name: limit
+      in: query
+      description: Limit the number of items returned.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: integer
+        example: 10
+    offset:
+      name: offset
+      in: query
+      description: Offset to items returned. Starts at zero.
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: integer
+        example: 0
+  securitySchemes:
+    auth_header:
+      type: apiKey
+      description: Authentication header
+      name: Authorization
+      in: header
