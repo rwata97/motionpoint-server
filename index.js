@@ -41,19 +41,3 @@ http.createServer(app).listen(serverPort, function () {
     serverPort
   );
 });
-
-// function insertMiddleware(app, middleware) {
-//   const stackLength = app._router.stack.length;
-//   app.use(middleware);
-//   app.use(function (req, res, next) {
-//     res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-//     res.header(
-//       'Access-Control-Allow-Headers',
-//       'Origin, X-Requested-With, Content-Type, Accept'
-//     );
-//     next();
-//   });
-//   app._router.stack.push(...app._router.stack.splice(stackLength - 2, 2));
-// }
-
-// insertMiddleware(app, cors());

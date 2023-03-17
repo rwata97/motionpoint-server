@@ -5,7 +5,7 @@ info:
     translation proxy configurations.
   license:
     name: Copyright (c) 2000-2023 MotionPoint Corporation. All Rights Reserved.
-  version: 2.0.0
+  version: 2.0.1
 servers:
 - url: /
 paths:
@@ -282,7 +282,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_3'
+                type: array
+                items:
+                  $ref: '#/components/schemas/inline_response_200_3'
+                x-content-type: application/json
         "400":
           description: Provided request parameters are invalid.
           content:
@@ -408,7 +411,7 @@ components:
         desc:
           type: string
           description: description of change
-          example: Descripton of configuration change.
+          example: Description of configuration change.
         config-text:
           type: string
           description: configuration text
@@ -426,7 +429,7 @@ components:
         issue-number: "1234.1"
         version: 40
         URL: http://www.motionpoint.com/
-        desc: Descripton of configuration change.
+        desc: Description of configuration change.
     proxyconfig_body:
       required:
       - URL
@@ -482,7 +485,7 @@ components:
         desc:
           type: string
           description: description of change (required)
-          example: Descripton of configuration change.
+          example: Description of configuration change.
         config-text:
           type: string
           description: configuration text (required)
@@ -557,7 +560,7 @@ components:
         desc:
           type: string
           description: description of change
-          example: Descripton of configuration change.
+          example: Description of configuration change.
         config-text:
           type: string
           description: configuration text
@@ -576,9 +579,8 @@ components:
         version: 40
         queue: EN.ES.1
         URL: http://www.motionpoint.com/
-        desc: Descripton of configuration change.
+        desc: Description of configuration change.
     inline_response_200_3:
-      type: object
       properties:
         changeset-id:
           type: integer
@@ -645,7 +647,7 @@ components:
         desc:
           type: string
           description: description of change
-          example: Descripton of configuration change.
+          example: Description of configuration change.
         issue-number:
           type: string
           description: issue number
@@ -660,7 +662,7 @@ components:
         created-by: Joe
         URL: http://www.motionpoint.com/
         date-created: 2023-03-06T01:42:27.078Z
-        desc: Descripton of configuration change.
+        desc: Description of configuration change.
   responses:
     Error400Response:
       description: Provided request parameters are invalid.
