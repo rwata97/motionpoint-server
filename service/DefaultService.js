@@ -16,7 +16,7 @@ exports.proxy_configGET = function (
   return new Promise(function (resolve, reject) {
     var examples = {};
     examples['application/json'] = {
-      'changeset-id': 25,
+      'changeset-id': 32,
       'config-text':
         '################## DB PROPERTIES ##################\n' +
         '#local.host.name=escoffeycommunications.convertlanguage.com\n' +
