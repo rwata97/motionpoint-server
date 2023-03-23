@@ -46,8 +46,7 @@ var writeJson = (exports.writeJson = function (response, arg1, arg2) {
 
   if (query['limit']) {
     const { limit, offset } = query;
-
-    payload = payload.slice(0 + offset, offset + limit);
+    payload.items = payload.items.slice(0 + offset, offset + limit);
   }
 
   if (!query['changeset-id'] && !query['limit']) {
