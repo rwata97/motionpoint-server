@@ -36,8 +36,6 @@ var writeJson = (exports.writeJson = function (response, arg1, arg2) {
     code = 200;
   }
 
-  console.log(response.req.url);
-
   if (query['changeset-id']) {
     payload = payload.filter(
       (obj) => obj['changeset-id'] === query['changeset-id']
