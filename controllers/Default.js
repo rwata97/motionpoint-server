@@ -13,7 +13,6 @@ module.exports.proxy_configGET = function proxy_configGET(
 ) {
   Default.proxy_configGET(xMotionCoreUserName, xMotionCoreQueue, changesetId)
     .then(function (response) {
-      console.log(xMotionCoreQueue);
       utils.writeJson(res, response);
     })
     .catch(function (response) {
