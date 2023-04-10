@@ -13,10 +13,14 @@ module.exports.proxy_configGET = function proxy_configGET(
 ) {
   Default.proxy_configGET(xMotionCoreUserName, xMotionCoreQueue, changesetId)
     .then(function (response) {
-      utils.writeJson(res, response);
+      setTimeout(function () {
+        utils.writeJson(res, response);
+      }, 5000);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      setTimeout(function () {
+        utils.writeJson(res, response);
+      }, 5000);
     });
 };
 
