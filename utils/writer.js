@@ -60,7 +60,7 @@ var writeJson = (exports.writeJson = function (response, arg1, arg2) {
   }
 
   response.writeHead(code, { 'Content-Type': 'application/json' });
-  // setTimeout(() => {
-  response.end(payload);
-  // }, 2000);
+  setTimeout(() => {
+    response.end(payload);
+  }, 2000);
 });
